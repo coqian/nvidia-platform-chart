@@ -13,12 +13,12 @@ dependencies:
     condition: node-feature-discovery.enabled
 
   - name: gpu-operator
-    version: v26.7.0
+    version: v26.7.2
     repository: https://helm.ngc.nvidia.com/nvidia
     condition: gpu-operator.enabled
 
   - name: network-operator
-    version: 26.4.1
+    version: 26.7.0
     repository: https://helm.ngc.nvidia.com/nvidia
     condition: network-operator.enabled
 
