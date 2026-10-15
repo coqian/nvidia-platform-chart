@@ -10,6 +10,6 @@ dependencies:
   version: 26.7.0
 - name: dranet
   repository: oci://registry.k8s.io/networking/charts
-  version: v1.4.0
-digest: sha256:2b03ce972e617bf32a5f6bc0105e456089ee558f877286c092c587847b1c33d4
-generated: "2026-10-15T12:41:19.634628+01:00"
+  version: v1.5.0
+digest: sha256:34fd9dac74049f70e2902a19fb1f5be3ea6386d7509094e5458698769edb15b8
+generated: "2026-10-15T12:42:47.196038+01:00"
