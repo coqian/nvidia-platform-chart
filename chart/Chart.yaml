@@ -12,6 +12,7 @@ dependencies:
     repository: oci://registry.k8s.io/nfd/charts
     condition: node-feature-discovery.enabled
 
+  # On upgrade, keep files/dcgm-metrics.csv a superset of the bundled dcgm-exporter's etc/dcp-metrics-included.csv.
   - name: gpu-operator
     version: v26.7.2
     repository: https://helm.ngc.nvidia.com/nvidia

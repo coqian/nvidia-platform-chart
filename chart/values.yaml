@@ -82,6 +82,14 @@ gpu-operator:
     # -- Tolerations for GPU Operator DaemonSets
     tolerations:
       - operator: Exists
+  dcgmExporter:
+    config:
+      # -- ConfigMap holding the platform-owned dcgm-exporter field list (files/dcgm-metrics.csv),
+      # which replaces the exporter's default list. The chart renders this ConfigMap while the name
+      # starts with nscale-dcgm-metrics-, and the suffix must be the first 8 hex characters of the
+      # file's sha256 (from `sha256sum chart/files/dcgm-metrics.csv`); rendering fails otherwise.
+      # Update it with every edit to the file so the exporter pods roll onto the new list.
+      name: nscale-dcgm-metrics-7f785bd4
 
 # Network Operator subchart values
 network-operator:
