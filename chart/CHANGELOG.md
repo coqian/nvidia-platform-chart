@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.2](https://github.com/nscaledev/nvidia-platform-chart/compare/nvidia-platform-0.3.1...nvidia-platform-0.3.2) (2026-10-28)
+
+
+### Dependencies
+
+* **dranet:** upgrade to v1.5.0 and document NUMA alignment ([6264024](https://github.com/nscaledev/nvidia-platform-chart/commit/62640247b6c4d0b1e166ad3bd4825b5a182ca946))
+* upgrade gpu-operator to v26.7.2, network-operator to 26.7.0 ([f21b061](https://github.com/nscaledev/nvidia-platform-chart/commit/f21b061709ff5adbad29edd9100bb3386c4baa49))
+* upgrade network-operator to 26.7.1, node-feature-discovery to 0.20.1 ([51750f3](https://github.com/nscaledev/nvidia-platform-chart/commit/51750f373eedd950afefd46b482c76ebcd5e7aa6))
+
 ## [0.3.1](https://github.com/nscaledev/nvidia-platform-chart/compare/nvidia-platform-0.3.0...nvidia-platform-0.3.1) (2026-09-30)
 
 
