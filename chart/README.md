@@ -98,9 +98,9 @@ to exactly one consumer.
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.ngc.nvidia.com/nvidia | gpu-operator | v26.7.2 |
-| https://helm.ngc.nvidia.com/nvidia | network-operator | 26.7.0 |
+| https://helm.ngc.nvidia.com/nvidia | network-operator | 26.7.1 |
 | oci://registry.k8s.io/networking/charts | dranet | v1.5.0 |
-| oci://registry.k8s.io/nfd/charts | node-feature-discovery | 0.19.0 |
+| oci://registry.k8s.io/nfd/charts | node-feature-discovery | 0.20.1 |
 
 ## Values
 
@@ -153,13 +153,13 @@ to exactly one consumer.
 | nicClusterPolicy.ofedDriver.upgradePolicy.drain.timeoutSeconds | int | `300` | Drain timeout in seconds |
 | nicClusterPolicy.ofedDriver.upgradePolicy.maxParallelUpgrades | int | `1` | Max nodes upgraded in parallel |
 | nicClusterPolicy.ofedDriver.upgradePolicy.safeLoad | bool | `false` | Enable safe driver loading |
-| nicClusterPolicy.ofedDriver.version | string | `"doca3.5.0-26.07-0.7.7.0-0"` | Image version tag |
+| nicClusterPolicy.ofedDriver.version | string | `"doca3.5.0-26.07-0.7.7.0-1"` | Image version tag |
 | nicClusterPolicy.rdmaSharedDevicePlugin.configs | list | `[{"rdmaHcaMax":8,"resourceName":"rdmashare","resourcePrefix":"nscale.com","selectors":{"deviceIDs":["1021","1023"],"vendors":["15b3"]}}]` | RDMA shared device plugin config list |
 | nicClusterPolicy.rdmaSharedDevicePlugin.enabled | bool | `true` | Enable RDMA shared device plugin |
 | nicClusterPolicy.rdmaSharedDevicePlugin.image | string | `"k8s-rdma-shared-dev-plugin"` | RDMA shared device plugin image name |
 | nicClusterPolicy.rdmaSharedDevicePlugin.repository | string | `"nvcr.io/nvidia/mellanox"` | Image repository |
 | nicClusterPolicy.rdmaSharedDevicePlugin.useCdi | bool | `true` | Enable Container Device Interface (CDI) for the RDMA shared device plugin |
-| nicClusterPolicy.rdmaSharedDevicePlugin.version | string | `"network-operator-v26.7.0"` | Image version tag |
+| nicClusterPolicy.rdmaSharedDevicePlugin.version | string | `"network-operator-v26.7.1"` | Image version tag |
 | node-feature-discovery.enabled | bool | `true` | Enable Node Feature Discovery subchart |
 | node-feature-discovery.fullnameOverride | string | `"node-feature-discovery"` | Override the fullname to avoid including the release name |
 | node-feature-discovery.gc.enable | bool | `true` | Enable NFD garbage collector |
