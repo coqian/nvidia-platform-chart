@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/nscaledev/nvidia-platform-chart/compare/nvidia-platform-0.3.2...nvidia-platform-0.4.0) (2026-10-29)
+
+
+### Features
+
+* **chart:** ship platform-owned DCGM field list ([1061fd6](https://github.com/nscaledev/nvidia-platform-chart/commit/1061fd6465ce75651b40fdf4e5a6820314efa44a))
+* **chart:** ship platform-owned DCGM field list ([183c408](https://github.com/nscaledev/nvidia-platform-chart/commit/183c40886c667621a66ce0b17c10d2c87683104a))
+
 ## [0.3.2](https://github.com/nscaledev/nvidia-platform-chart/compare/nvidia-platform-0.3.1...nvidia-platform-0.3.2) (2026-10-28)
 
 
