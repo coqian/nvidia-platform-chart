@@ -93,6 +93,35 @@ Switching from the RDMA shared device plugin to DRANET also changes the capacity
 plugin's `rdmaHcaMax` (8 by default) lets multiple pods share one HCA, while DRA allocates each NIC
 to exactly one consumer.
 
+## DCGM Exporter Metrics
+
+The chart ships a platform-owned dcgm-exporter field list in
+[files/dcgm-metrics.csv](files/dcgm-metrics.csv) and renders it into a ConfigMap on every cluster,
+in both the `ClusterPolicy` and `GPUCluster` stacks. The GPU Operator uses it in place of the
+exporter's default list (`dcp-metrics-included.csv`) rather than merging the two, so the file keeps
+all 26 entries of that default (dcgm-exporter 4.8.4, as bundled by GPU Operator v26.7.2) and adds
+the fields Blackwell fault detection needs: ECC errors, row-remap pending and inforom validity,
+clock-event reasons and slowdown durations, power and thermal violations, slowdown/shutdown
+temperatures and the enforced power limit, the XID error count, DCGM health status, the GPU
+recovery action, NVLink 5 error, recovery and bit-error-rate counters, NVLink fabric status and
+health, and Grace-Blackwell C2C link errors. The exporter silently skips fields a GPU doesn't report
+(e.g. C2C on B200); the pre-Blackwell NVLink error counters are deliberately left out because
+Blackwell doesn't populate them.
+
+The ConfigMap's name, set in `gpu-operator.dcgmExporter.config.name`, must be `nscale-dcgm-metrics-`
+followed by the first 8 hex characters of the file's sha256, and rendering fails until it matches:
+
+```bash
+sha256sum chart/files/dcgm-metrics.csv | cut -c1-8
+```
+
+The GPU Operator mounts the list into the exporter via `subPath`, which never picks up ConfigMap
+updates, so the new name on every edit is what rolls the exporter DaemonSet onto the new list.
+
+dcgm-exporter refuses to start if the list contains a field name it doesn't recognise, so check any
+new name against the exporter version the GPU Operator bundles. When upgrading the GPU Operator,
+re-check the list against the new exporter's `dcp-metrics-included.csv` and keep it a superset.
+
 ## Requirements
 
 | Repository | Name | Version |
@@ -114,6 +143,7 @@ to exactly one consumer.
 | gpu-operator.ccManager.enabled | bool | `false` | Deploy the Confidential Computing manager. Pinned to false: the subchart flipped this default to true in v26.3.x without a release note. |
 | gpu-operator.cdi.enabled | bool | `true` | Enable Container Device Interface |
 | gpu-operator.daemonsets.tolerations | list | `[{"operator":"Exists"}]` | Tolerations for GPU Operator DaemonSets |
+| gpu-operator.dcgmExporter.config.name | string | `"nscale-dcgm-metrics-7f785bd4"` | ConfigMap holding the platform-owned dcgm-exporter field list (files/dcgm-metrics.csv), which replaces the exporter's default list. The chart renders this ConfigMap while the name starts with nscale-dcgm-metrics-, and the suffix must be the first 8 hex characters of the file's sha256 (from `sha256sum chart/files/dcgm-metrics.csv`); rendering fails otherwise. Update it with every edit to the file so the exporter pods roll onto the new list. |
 | gpu-operator.driver.enabled | bool | `true` | Enable GPU driver |
 | gpu-operator.driver.rdma.enabled | bool | `false` | Enable GPUDirect RDMA support in the GPU driver |
 | gpu-operator.driver.rdma.useHostMofed | bool | `false` | Use MOFED drivers pre-installed on the host |

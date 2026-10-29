@@ -1,0 +1,19 @@
+{{- $gpuOperator := index .Values "gpu-operator" }}
+{{- $name := dig "dcgmExporter" "config" "name" "" $gpuOperator }}
+{{- if and $gpuOperator.enabled (dig "dcgmExporter" "enabled" false $gpuOperator) (hasPrefix "nscale-dcgm-metrics-" $name) }}
+{{- $csv := .Files.Get "files/dcgm-metrics.csv" }}
+{{- $expected := printf "nscale-dcgm-metrics-%s" (sha256sum $csv | trunc 8) }}
+{{- if ne $name $expected }}
+{{- fail (printf "gpu-operator.dcgmExporter.config.name is %q but files/dcgm-metrics.csv requires %q: update the name in values.yaml whenever the field list changes." $name $expected) }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "nvidia-platform.labels" . | nindent 4 }}
+data:
+  dcgm-metrics.csv: |
+    {{- $csv | nindent 4 }}
+{{- end }}

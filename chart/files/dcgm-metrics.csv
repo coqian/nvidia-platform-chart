@@ -1,0 +1,91 @@
+# DCGM exporter field list owned by the nvidia-platform chart.
+#
+# The chart renders this file into the ConfigMap named by
+# gpu-operator.dcgmExporter.config.name, which replaces dcgm-exporter's
+# default list on every cluster. That name must end with the first 8 hex
+# characters of this file's sha256 (sha256sum chart/files/dcgm-metrics.csv),
+# so any edit here also needs the name in values.yaml updated, which rolls
+# the exporter pods.
+#
+# Format: DCGM field, Prometheus metric type, help message. Help messages
+# must not contain commas. dcgm-exporter refuses to start if a field name is
+# unknown to it, and silently skips fields a GPU doesn't report.
+
+# dcgm-exporter 4.8.4 defaults (etc/dcp-metrics-included.csv, the list
+# gpu-operator v26.7.2 uses when no ConfigMap is set), unchanged. Keep this
+# block a superset of that file when upgrading gpu-operator.
+DCGM_FI_DEV_SM_CLOCK,  gauge, SM clock frequency (in MHz).
+DCGM_FI_DEV_MEM_CLOCK, gauge, Memory clock frequency (in MHz).
+DCGM_FI_DEV_MEMORY_TEMP, gauge, Memory temperature (in C).
+DCGM_FI_DEV_GPU_TEMP,    gauge, GPU temperature (in C).
+DCGM_FI_DEV_POWER_USAGE,              gauge, Power draw (in W).
+DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION, counter, Total energy consumption since the driver was last reloaded (in mJ).
+DCGM_FI_DEV_PCIE_REPLAY_COUNTER, counter, Total number of PCIe retries.
+DCGM_FI_DEV_GPU_UTIL,      gauge, GPU utilization (in %).
+DCGM_FI_DEV_MEM_COPY_UTIL, gauge, Memory utilization (in %).
+DCGM_FI_DEV_ENC_UTIL,      gauge, Encoder utilization (in %).
+DCGM_FI_DEV_DEC_UTIL ,     gauge, Decoder utilization (in %).
+DCGM_FI_DEV_XID_ERRORS,            gauge,   Value of the last XID error encountered.
+DCGM_FI_DEV_FB_FREE, gauge, Framebuffer memory free (in MiB).
+DCGM_FI_DEV_FB_USED, gauge, Framebuffer memory used (in MiB).
+DCGM_FI_DEV_FB_RESERVED, gauge, Framebuffer memory reserved (in MiB).
+DCGM_FI_DEV_NVLINK_BANDWIDTH_TOTAL, gauge, Aggregate NVLink throughput across all lanes (in MB/s).
+DCGM_FI_DEV_VGPU_LICENSE_STATUS, gauge, vGPU License status
+DCGM_FI_DEV_UNCORRECTABLE_REMAPPED_ROWS, counter, Number of remapped rows for uncorrectable errors
+DCGM_FI_DEV_CORRECTABLE_REMAPPED_ROWS,   counter, Number of remapped rows for correctable errors
+DCGM_FI_DEV_ROW_REMAP_FAILURE,           gauge,   Whether remapping of rows has failed
+DCGM_FI_DRIVER_VERSION,        label, Driver Version
+DCGM_FI_PROF_GR_ENGINE_ACTIVE,   gauge, Ratio of time the graphics engine is active.
+DCGM_FI_PROF_PIPE_TENSOR_ACTIVE, gauge, Ratio of cycles the tensor (HMMA) pipe is active.
+DCGM_FI_PROF_DRAM_ACTIVE,        gauge, Ratio of cycles the device memory interface is active sending or receiving data.
+DCGM_FI_PROF_PCIE_TX_BYTES,      gauge, The rate of data transmitted over the PCIe bus - including both protocol headers and data payloads - in bytes per second.
+DCGM_FI_PROF_PCIE_RX_BYTES,      gauge, The rate of data received over the PCIe bus - including both protocol headers and data payloads - in bytes per second.
+
+# Platform additions for Blackwell (B200, GB200, GB300) fault detection.
+
+# ECC
+DCGM_FI_DEV_ECC_SBE_VOL_TOTAL, counter, Total number of single-bit volatile ECC errors.
+DCGM_FI_DEV_ECC_DBE_VOL_TOTAL, counter, Total number of double-bit volatile ECC errors.
+DCGM_FI_DEV_ECC_SBE_AGG_TOTAL, counter, Total number of single-bit persistent ECC errors.
+DCGM_FI_DEV_ECC_DBE_AGG_TOTAL, counter, Total number of double-bit persistent ECC errors.
+
+# Row remapping and inforom
+DCGM_FI_DEV_ROW_REMAP_PENDING,    gauge, Whether remapping of rows is pending (1 means pending and 0 means not pending).
+DCGM_FI_DEV_INFOROM_CONFIG_VALID, gauge, Whether the inforom configuration checksums are valid (1 means valid).
+
+# Clock events and limits
+DCGM_FI_DEV_CLOCKS_EVENT_REASONS,                   gauge,   Bitmask of the current clock event (throttle) reasons.
+DCGM_FI_DEV_POWER_VIOLATION,                        counter, Throttling duration due to power constraints (in ns).
+DCGM_FI_DEV_THERMAL_VIOLATION,                      counter, Throttling duration due to thermal constraints (in ns).
+DCGM_FI_DEV_CLOCKS_EVENT_REASON_SW_THERM_SLOWDOWN_NS,       counter, Clock slowdown duration to stay within the maximum operating temperatures (in ns).
+DCGM_FI_DEV_CLOCKS_EVENT_REASON_HW_THERM_SLOWDOWN_NS,       counter, Hardware clock slowdown duration due to high temperature (in ns).
+DCGM_FI_DEV_CLOCKS_EVENT_REASON_HW_POWER_BRAKE_SLOWDOWN_NS, counter, Hardware clock slowdown duration due to an external power brake (in ns).
+DCGM_FI_DEV_SLOWDOWN_TEMP,          gauge, Temperature at which the GPU slows down (in C).
+DCGM_FI_DEV_SHUTDOWN_TEMP,          gauge, Temperature at which the GPU shuts down (in C).
+DCGM_FI_DEV_ENFORCED_POWER_LIMIT,   gauge, Effective power limit enforced by the driver after all limiters (in W).
+
+# XID, DCGM health and recovery action. Listing DCGM_EXP_GPU_HEALTH_STATUS
+# makes the exporter enable every DCGM health watch on its GPU group.
+DCGM_EXP_XID_ERRORS_TOTAL,  counter, Total XID errors observed since exporter start.
+DCGM_EXP_GPU_HEALTH_STATUS, gauge,   Current DCGM-reported GPU health status.
+DCGM_FI_DEV_GPU_RECOVERY_ACTION, gauge, Recovery action the driver requires for this GPU (0 means none).
+
+# NVLink 5 (Blackwell) errors. The pre-Blackwell NVLink error counters
+# (fields 409/419/429/439 and 497-499) aren't populated on Blackwell.
+DCGM_FI_DEV_NVLINK_RX_ERROR_TOTAL,            counter, Total number of NVLink packets received with errors across all links.
+DCGM_FI_DEV_NVLINK_RECOVERY_SUCCESSFUL_TOTAL, counter, Total number of successful NVLink recovery events across all links.
+DCGM_FI_DEV_NVLINK_RECOVERY_FAILED_TOTAL,     counter, Total number of failed NVLink recovery events across all links.
+DCGM_FI_DEV_NVLINK_RECOVERY_EVENT_TOTAL,      counter, Total number of NVLink recovery events across all links.
+DCGM_FI_DEV_NVLINK_RX_SYMBOL_ERROR_TOTAL,     counter, Total number of NVLink received symbol errors across all links.
+DCGM_FI_DEV_NVLINK_SYMBOL_BER_RATIO,          gauge,   NVLink symbol bit error rate across all links.
+DCGM_FI_DEV_NVLINK_ECC_ERROR_TOTAL,           counter, Total number of NVLink ECC data errors across all links.
+
+# NVLink fabric
+DCGM_FI_DEV_FABRIC_MANAGER_STATUS, gauge, Fabric manager status for the GPU (3 means success and 4 means failure).
+DCGM_FI_DEV_FABRIC_MANAGER_ERROR,  gauge, Fabric manager error code when its status is failure.
+DCGM_FI_DEV_FABRIC_HEALTH_SUMMARY, gauge, Overall health of the GPU fabric.
+DCGM_FI_DEV_FABRIC_HEALTH_MASK,    gauge, GPU fabric health status mask.
+
+# Grace-Blackwell C2C link (GB200 and GB300 only; skipped on B200)
+DCGM_FI_DEV_C2C_LINK_ERROR_TOTAL,        counter, Total number of C2C link CRC errors.
+DCGM_FI_DEV_C2C_LINK_REPLAY_ERROR_TOTAL, counter, Total number of C2C link replay errors.
